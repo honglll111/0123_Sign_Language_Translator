@@ -1,119 +1,144 @@
-<!DOCTYPE html>
+<!doctype html> 
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="#{app.title}">모니터링 AI 서비스</title>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script type="text/javascript" th:src="@{/js/paho-mqtt.js}"></script>
-    <style th:inline="css">
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #faf0e6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            max-width: 90%;
-            max-height: 90%;
-            overflow: hidden;
-        }
-        .camera-icon {
-            width: 100px;
-            height: 100px;
-            background-color: #8e44ad;
-            border-radius: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 20px auto;
-            cursor: pointer;
-        }
-        .camera-icon::before {
-            content: "";
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 15px 0 15px 25px;
-            border-color: transparent transparent transparent white;
-        }
-        .instruction {
-            margin-top: 20px;
-            color: #666;
-        }
-        #cameraView {
-            max-width: 100%;
-            max-height: 70vh;
-            display: none;
-            margin-top: 20px;
-        }
-    </style>
+<head> 
+	<meta charset="utf-8">
+	<meta name="viewport" content="height=device-height">
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+	<script type="text/javascript" src="./js/paho-mqtt.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		//클라이언트 인스턴스 생성(MQTT 서버의 주소를 입력해야 함)
+		client = new Paho.MQTT.Client("localhost", 61614, new Date().getTime().toString());
+
+		// 이벤트 핸들러 설정
+		client.onConnectionLost = onConnectionLost;
+		client.onMessageArrived = onMessageArrived;
+
+		// 클라이언트 연결, 연결 성공하면 onConnect() 함수를 실행함
+		client.connect({onSuccess:onConnect});
+	})
+
+	// 클라이언트가 연결되었을 때 호출되는 콜백함수
+	function onConnect() {
+		console.log("mqtt broker subscriber connected");
+		client.subscribe("/#");
+	}
+
+	// 클라이언트가 커넥션을 읽을 때 호출되는 콜백함수
+	function onConnectionLost(responseObject) {
+	  if (responseObject.errorCode !== 0) {
+	    console.log("onConnectionLost:"+responseObject.errorMessage);
+	  }
+	}
+
+	// 메시지가 도착했을 때 호출되는 콜백함수
+	function onMessageArrived(message) {
+		if(message.destinationName == "/camerapub") {
+			$("#cameraView").attr("src", "data:image/jpg;base64, " + message.payloadString);
+		}
+	}
+	</script>
+    <title th:text="#{app.title}">한국수어번역기 - Hand Reader</title>
+	<style>
+	div {
+		width: 100%;
+		height: 100%;
+	}
+	img #cameraView {
+	            max-width: 100%;
+	            max-height: 70vh;
+	            display: none;
+	            margin-top: 20px;
+	        }
+	</style>
+	
+	 <!-- Favicon-->
+     <link rel="icon" type="image/x-icon" href="bootstrap/assets/favicon.ico" />
+     <!-- Custom Google font-->
+     <link rel="preconnect" href="https://fonts.googleapis.com" />
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
+     <!-- Bootstrap icons-->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet" />
+     <!-- Core theme CSS (includes Bootstrap)-->
+     <link href="bootstrap/css/styles.css" rel="stylesheet" />
 </head>
-<body>
-    <div class="container">
-        <div id="cameraIcon" class="camera-icon"></div>
-        <p class="instruction" th:text="#{camera.instruction}">카메라 연결을 위해 화면을 클릭하세요.</p>
-        <img id="cameraView" th:alt="#{camera.feed.alt}" alt="Camera Feed"/>
-    </div>
-
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        const mqttHost = /*[[${mqttHost}]]*/ 'localhost';
-        const mqttPort = /*[[${mqttPort}]]*/ 61614;
-        const mqttTopic = /*[[${mqttTopic}]]*/ '/camerapub';
-        /*]]>*/
-
-        $(function() {
-            // MQTT client setup
-            client = new Paho.MQTT.Client(mqttHost, mqttPort, new Date().getTime().toString());
-            client.onConnectionLost = onConnectionLost;
-            client.onMessageArrived = onMessageArrived;
-            client.connect({onSuccess:onConnect});
-
-            // Camera toggle functionality
-            let isStreaming = false;
-            $("#cameraIcon").on("click", toggleCamera);
-
-            function toggleCamera() {
-                if (!isStreaming) {
-                    $("#cameraView").show();
-                    isStreaming = true;
-                    // Here you would typically start the MQTT publishing process
-                    // For demonstration, we'll just log a message
-                  
-                    console.log("Starting camera stream");
-                } else {
-                    $("#cameraView").hide();
-                    isStreaming = false;
-                    console.log("Stopping camera stream");
-                }
-            }
-        });
-
-        function onConnect() {
-            console.log("mqtt broker subscriber connected");
-            client.subscribe(mqttTopic);
-        }
-
-        function onConnectionLost(responseObject) {
-            if (responseObject.errorCode !== 0) {
-                console.log("onConnectionLost:" + responseObject.errorMessage);
-            }
-        }
-
-        function onMessageArrived(message) {
-            if(message.destinationName == mqttTopic) {
-                $("#cameraView").attr("src", "data:image/jpg;base64, " + message.payloadString);
-            }
-        }
-    </script>
+<body class="d-flex flex-column h-100 bg-light">
+	<!--h5 class="alert alert-info">AI 실증 서비스</h5-->
+	<main class="flex-shrink-0">
+	
+            <!-- Navigation-->
+            <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+                <div class="container px-5">
+                    <a class="navbar-brand" href="/"><span class="fw-bolder text-primary">Hand Reader</span></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
+                            <li class="nav-item"><a class="nav-link" href="index.html">About</a></li>
+                            <li class="nav-item"><a class="nav-link" href="projects.html">Work</a></li>
+                            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            
+            <!-- Projects Section-->
+            <section class="py-5">
+                <div class="container px-5 mb-5">
+                    <div class="row gx-5 justify-content-center">
+                        <div class="col-lg-11 col-xl-9 col-xxl-8">
+                            <!-- Project Card 1-->
+                            <div class="card overflow-hidden shadow rounded-4 border-0 mb-5">
+                                <div class="card-body p-0">
+                                    <div align="center">
+										<img id="cameraView" width=100% height=100%/> <!-- 카메라 -->
+									</div>
+                                </div>
+                            </div>
+                            <!-- Project Card 2-->
+                            <div class="card overflow-hidden shadow rounded-4 border-0">
+                                <div class="card-body p-0">
+                                    <div class="d-flex align-items-center">
+                                        <div class="p-5">
+                                            <p>여기는 자막 나오는 구간</p> <!-- 자막 -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            
+            <!-- bottom -->
+            <section class="py-5 bg-gradient-primary-to-secondary text-white">
+                <div class="container px-5 my-5">
+                    <div class="text-center">
+                        <h2 class="display-4 fw-bolder mb-4">Let's build something together</h2>
+                        <a class="btn btn-outline-light btn-lg px-5 py-3 fs-6 fw-bolder" href="contact.html">Contact me</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <!-- Footer-->
+        <footer class="bg-white py-4 mt-auto">
+            <div class="container px-5">
+                <div class="row align-items-center justify-content-between flex-column flex-sm-row">
+                    <div class="col-auto"><div class="small m-0">Copyright &copy; Your Website 2023</div></div>
+                    <div class="col-auto">
+                        <a class="small" href="#!">Privacy</a>
+                        <span class="mx-1">&middot;</span>
+                        <a class="small" href="#!">Terms</a>
+                        <span class="mx-1">&middot;</span>
+                        <a class="small" href="#!">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
 </body>
 </html>
