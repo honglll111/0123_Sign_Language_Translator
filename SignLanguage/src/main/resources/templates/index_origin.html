@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.6.1.js"></script>
+<script type="text/javascript">
+$(function() {
+    $("input[type=button]").click(function() {
+        console.log()
+        var form = $("#fileUploadForm")[0];
+        var form_data = new FormData(form);
+        $("input[type=button]").prop("disabled", true);
+        $.ajax({
+            url : "http://localhost:8080/java_service",
+            async : true,
+            type : "POST",
+            data : form_data,
+            processData: false,
+            contentType: false,
+            success : function(data) {
+                response = JSON.parse(data)
+                $("#result").html(response.param+"<br>")
+                img_src = "data:image/png;base64,"+response.file
+                $("#result").append("<img src='"+img_src+"'>");
+                $("input[type=button]").prop("disabled", false);
+            },
+            error : function(e) {
+                console.log("ERROR : ", e);
+                alert("fail");
+            }
+        });
+    })
+});
+</script>
+</head>
+<body>
+<h1>Welcome Java.</h1>
+<form method="post" enctype="multipart/form-data" id="fileUploadForm">
+    데이터 : <input type="text" name="data" value="test hello"><p>
+    파일 : <input type="file" name="file"><p>
+    <input type="button" value=" 비동기 요청  ">
+</form>
+<div id="result">여기에 요청 결과가 출력되어야 합니다.</div>
+</body>
+</html>
