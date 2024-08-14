@@ -8183,9 +8183,28 @@ textarea.form-control-lg {
 }
 
 /* rtl:end:remove */
-.text-primary {
+.text-primary1 {
   --bs-text-opacity: 1;
   color: rgba(var(--bs-primary-rgb), var(--bs-text-opacity)) !important;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.table td:nth-child(1) {
+  text-align: center;
+}
+
+.date-column {
+    width: 200px; /* Date 열의 너비를 150px로 설정 */
+    text-align: center; /* Date 열의 텍스트를 가운데 정렬 */
+}
+
+
+.text-primary2 {
+  --bs-text-opacity: 1;
+  color: rgba(var(--bs-primary-rgb), var(--bs-text-opacity)) !important;
+  text-align: center;
+  font-size: 1.5rem;
 }
 
 .text-secondary {
