@@ -1,40 +1,64 @@
 package com.example.myapp.model;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import jakarta.persistence.*;
+import java.sql.Timestamp;
+import java.time.format.DateTimeFormatter;
 
 @Entity
+@Table(name = "LOG")
 public class Log {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 글번호
+    @Column(name = "ROW_NUM")
+    private Long rowNum;
 
-    private LocalDateTime date; // 날짜
+    @Column(name = "LOG_DATE", nullable = false)
+    private Timestamp logDate;
 
     @Lob
-    private String sentence; // 긴 문장
+    @Column(name = "INPUT_TEXT")
+    private String inputText;
 
-    @Transient
-    private Long rownum; // 행 번호 (데이터베이스에서 계산됨)
+    @Lob
+    @Column(name = "OUTPUT_TEXT")
+    private String outputText;
+
+    @Lob
+    @Column(name = "SENTENCE", nullable = false)
+    private String sentence;
 
     // Getter and Setter methods
-
-    public Long getId() {
-        return id;
+    public Long getRowNum() {
+        return rowNum;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setRowNum(Long rowNum) {
+        this.rowNum = rowNum;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public Timestamp getLogDate() {
+        return logDate;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setLogDate(Timestamp logDate) {
+        this.logDate = logDate;
+    }
+
+    public String getInputText() {
+        return inputText;
+    }
+
+    public void setInputText(String inputText) {
+        this.inputText = inputText;
+    }
+
+    public String getOutputText() {
+        return outputText;
+    }
+
+    public void setOutputText(String outputText) {
+        this.outputText = outputText;
     }
 
     public String getSentence() {
@@ -45,17 +69,8 @@ public class Log {
         this.sentence = sentence;
     }
 
-    public Long getRownum() {
-        return rownum;
-    }
-
-    public void setRownum(Long rownum) {
-        this.rownum = rownum;
-    }
-
-    // 포맷된 날짜 반환
     public String getFormattedDate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return date != null ? date.format(formatter) : "";
+        return logDate != null ? logDate.toLocalDateTime().format(formatter) : "";
     }
 }

@@ -2,11 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Records</title>
-	<!-- Favicon-->
+    <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="bootstrap/assets/favicon.ico" />
     <!-- Custom Google font-->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,10 +23,9 @@
 </head>
 <body class="d-flex flex-column h-100 bg-light">
     <main class="flex-shrink-0">
-		
-		<!-- Navigation-->
+        <!-- Navigation -->
         <nav th:replace="navbar :: navbarFragment"></nav>
-		
+
         <!-- Page Content -->
         <div class="container px-5 my-5">
             <div class="text-center mb-5">
@@ -35,32 +34,72 @@
                 </h1>
             </div>
             <div class="card shadow border-0 rounded-4 mb-5">
-                <div class="card-body p-5">
-                    <div class="row align-items-center gx-5">
-                        <!-- 여기에 추가적인 콘텐츠를 삽입할 수 있습니다 -->
-                    </div>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <td class="text-primary1 date-column fw-bolder mb-0">Date</td>
-                                <td class="text-primary2 fw-bolder mb-0">Sentence</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- logs라는 리스트를 순회하며 각 로그를 테이블에 출력 -->
-                            <tr th:each="log : ${logs}">
-                                <td class="date-column" th:text="${log.getFormattedDate()}"></td>
-                                <td th:text="${log.sentence}"></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="card-body p-5 scrollable-box">
+                        <div class="row align-items-center gx-5">
+                            <!-- 여기에 추가적인 콘텐츠를 삽입할 수 있습니다 -->
+                        </div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <td class="text-primary3 fw-bolder mb-0">No</td>
+                                    <td class="text-primary1 date-column fw-bolder mb-0">Date</td>
+                                    <td class="text-primary2 fw-bolder mb-0">Sentence</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+								<tr th:each="log, iterStat : ${logs}">
+								    <td th:text="${iterStat.index + 1}"></td>
+								    <td class="date-column" style="font-variant-numeric: tabular-nums;">
+								        <span th:text="${#dates.format(log.logDate, 'yyyy-MM-dd')}"></span>&nbsp;&nbsp;
+								        <span th:text="${#dates.format(log.logDate, 'HH:mm:ss')}"></span>
+								    </td>
+								    <td th:text="${log.outputText}"></td> <!-- outputText 필드를 직접 표시 -->
+								</tr>
+                            </tbody>
+                        </table>
+                        <!-- Back to Top Button -->
+                        <button
+                            type="button"
+                            class="btn btn-danger btn-floating btn-lg"
+                            id="btn-back-to-top"
+                        >
+                            <i class="bi bi-arrow-up"></i>
+                        </button>
                 </div>
             </div>
-			<!-- Footer-->
-	        <footer th:replace="footer :: footerFragment"></footer>
         </div>
     </main>
+
+    <!-- Footer -->
+    <footer th:replace="footer :: footerFragment"></footer>
+
     <!-- Bootstrap JS 추가 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS for Back to Top functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let scrollableBox = document.querySelector('.scrollable-box');
+            let backToTopButton = document.getElementById('btn-back-to-top');
+
+            // 스크롤 이벤트 감지
+            scrollableBox.addEventListener('scroll', function () {
+                // 스크롤이 50px 이상 내려가면 버튼을 표시
+                if (scrollableBox.scrollTop > 50) {
+                    backToTopButton.style.display = 'block';
+                } else {
+                    backToTopButton.style.display = 'none';
+                }
+            });
+
+            // 버튼 클릭 시 스크롤을 맨 위로 이동
+            backToTopButton.addEventListener('click', function () {
+                scrollableBox.scrollTo({
+                    top: 0,
+                    behavior: 'smooth' // 부드럽게 스크롤
+                });
+            });
+        });
+    </script>
 </body>
 </html>

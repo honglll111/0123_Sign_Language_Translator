@@ -1,15 +1,20 @@
 package com.example.myapp.dto;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 public class LogDto {
-    private int rowNum;
-    private LocalDateTime date;
-    private String sentence;
 
-    public LogDto(int rowNum, LocalDateTime date, String sentence) {
+    private int rowNum;
+    private Timestamp date;
+    private String inputText; // 중간 단어들 (검정색으로 표시)
+    private String outputText; // 최종 문장 (파란색으로 표시)
+    private String sentence; // 추가된 sentence 필드
+
+    public LogDto(int rowNum, Timestamp date, String inputText, String outputText, String sentence) { // 수정된 생성자
         this.rowNum = rowNum;
         this.date = date;
+        this.inputText = inputText;
+        this.outputText = outputText;
         this.sentence = sentence;
     }
 
@@ -22,19 +27,35 @@ public class LogDto {
         this.rowNum = rowNum;
     }
 
-    public LocalDateTime getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 
-    public String getSentence() {
+    public String getInputText() {
+        return inputText;
+    }
+
+    public void setInputText(String inputText) {
+        this.inputText = inputText;
+    }
+
+    public String getOutputText() {
+        return outputText;
+    }
+
+    public void setOutputText(String outputText) {
+        this.outputText = outputText;
+    }
+
+    public String getSentence() { // 추가된 Getter
         return sentence;
     }
 
-    public void setSentence(String sentence) {
+    public void setSentence(String sentence) { // 추가된 Setter
         this.sentence = sentence;
     }
 }

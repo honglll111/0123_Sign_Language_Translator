@@ -17,7 +17,7 @@ public class RecordsController {
 
     @GetMapping("/records")
     public String showProjects(Model model) {
-        List<com.example.myapp.model.Log> logs = logRepository.findAll(); // DB에서 모든 로그를 가져옴
+        List<Log> logs = logRepository.findAllLogsOrderedByDateDesc(); // DB에서 내림차순으로 정렬된 로그를 가져옴
         model.addAttribute("logs", logs);
         return "records";
     }

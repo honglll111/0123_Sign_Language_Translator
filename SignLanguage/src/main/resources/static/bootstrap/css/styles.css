@@ -313,11 +313,20 @@ table {
   border-collapse: collapse;
 }
 
-caption {
+#caption {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-  color: #6c757d;
   text-align: left;
+}
+
+#inputText {
+  color: #000 !important; /* 중간 단어들 - 검정색 */
+  font-weight: normal !important;
+}
+
+#outputText {
+  color: blue !important; /* 최종 문장 - 파란색 */
+  font-weight: bold !important;
 }
 
 th {
@@ -4176,6 +4185,7 @@ textarea.form-control-lg {
   background-clip: border-box;
   border: var(--bs-card-border-width) solid var(--bs-card-border-color);
   border-radius: var(--bs-card-border-radius);
+  margin-top: -50px;
 }
 .card > hr {
   margin-right: 0;
@@ -6997,6 +7007,9 @@ textarea.form-control-lg {
 
 .d-inline {
   display: inline !important;
+  font-size: 2rem; /* 글씨 크기를 조절합니다. 필요에 따라 값을 조정하세요. */
+  position: relative;
+  top: -30px; /* 텍스트를 위로 살짝 이동시킵니다. 필요에 따라 값을 조정하세요. */
 }
 
 .d-inline-block {
@@ -8195,8 +8208,9 @@ textarea.form-control-lg {
 }
 
 .date-column {
-    width: 200px; /* Date 열의 너비를 150px로 설정 */
+    width: 230px; /* Date 열의 너비를 150px로 설정 */
     text-align: center; /* Date 열의 텍스트를 가운데 정렬 */
+	letter-spacing: 0.8px;
 }
 
 
@@ -8205,6 +8219,21 @@ textarea.form-control-lg {
   color: rgba(var(--bs-primary-rgb), var(--bs-text-opacity)) !important;
   text-align: center;
   font-size: 1.5rem;
+}
+
+/* 기존 스타일 수정 */
+/* No 열 스타일 추가 */
+.text-primary3 {
+  --bs-text-opacity: 1;
+  color: rgba(var(--bs-primary-rgb), var(--bs-text-opacity)) !important; /* 예시 색상, 필요에 따라 변경하세요 */
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+/* No 열의 너비 설정 및 가운데 정렬 */
+.table td:nth-child(1) {
+  width: 70px; /* No 열의 너비를 50px로 설정, 필요에 따라 조정하세요 */
+  text-align: center;
 }
 
 .text-secondary {
@@ -11749,5 +11778,23 @@ html {
   .profile .dots-4 {
     width: 1.5vw;
     left: -2vw;
+  }
+  /* card-body의 최대 높이 지정하고 스크롤바 추가 */
+  .scrollable-box {
+      max-height: 550px; /* 원하는 높이로 조정 */
+      overflow-y: auto;
+      position: relative; /* 자식 요소인 버튼을 절대 위치로 배치하기 위한 설정 */
+  }
+
+  #btn-back-to-top {
+      position: fixed;
+	  opacity: 0.7;
+	  background-color: #1e30f3;
+	  border-color: #1e30f3;
+      bottom: 150px;
+      right: 210px;
+      display: none; /* 항상 표시되도록 수정 */
+      z-index: 99;
+	  border-radius: 20%;
   }
 }
