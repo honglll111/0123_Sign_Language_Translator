@@ -43,7 +43,8 @@
                                 <tr>
                                     <td class="text-primary3 fw-bolder mb-0">No</td>
                                     <td class="text-primary1 date-column fw-bolder mb-0">Date</td>
-                                    <td class="text-primary2 fw-bolder mb-0">Sentence</td>
+                                    <td class="text-primary2 fw-bolder mb-0">word</td>
+									<td class="text-primary2 fw-bolder mb-0">Sentence</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -53,6 +54,7 @@
 								        <span th:text="${#dates.format(log.logDate, 'yyyy-MM-dd')}"></span>&nbsp;&nbsp;
 								        <span th:text="${#dates.format(log.logDate, 'HH:mm:ss')}"></span>
 								    </td>
+									<td th:text="${log.inputText}"></td>
 								    <td th:text="${log.outputText}"></td> <!-- outputText 필드를 직접 표시 -->
 								</tr>
                             </tbody>

@@ -15,7 +15,6 @@ public class Caption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String inputText;
     private String outputText;
     private LocalDateTime timestamp;

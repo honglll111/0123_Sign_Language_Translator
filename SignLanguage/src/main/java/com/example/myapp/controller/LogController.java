@@ -21,15 +21,21 @@ public class LogController {
     // 최종 문장 수신을 위한 POST 엔드포인트
     @PostMapping("/receiveOutput")
     public ResponseEntity<Map<String, String>> receiveOutput(@RequestBody Map<String, String> payload) {
-        String messageText = payload.get("text");
-        boolean isFinalOutput = messageText.startsWith("FINAL_OUTPUT:");
+        String inputText = payload.get("inputText");
+        String outputText = payload.get("outputText");
 
-        if (isFinalOutput) {
-            messageText = messageText.replace("FINAL_OUTPUT:", "").trim();
-            logService.saveCaption(messageText, true); // 최종 문장으로 저장
-        } else {
-            logService.saveCaption(messageText, false); // 중간 단어로 저장
+        if (inputText == null || outputText == null) {
+            return ResponseEntity.badRequest().body(Map.of("status", "error", "message", "Missing inputText or outputText"));
         }
+
+        // 최종 문장 여부 확인 (필요 시)
+        boolean isFinalOutput = outputText.startsWith("FINAL_OUTPUT:");
+        if (isFinalOutput) {
+            outputText = outputText.replace("FINAL_OUTPUT:", "").trim();
+        }
+
+        // Log 저장
+        logService.saveLog(inputText, outputText, isFinalOutput);
 
         return ResponseEntity.ok(Map.of("status", "success"));
     }

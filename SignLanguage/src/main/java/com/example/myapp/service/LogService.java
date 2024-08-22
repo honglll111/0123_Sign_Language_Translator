@@ -17,32 +17,28 @@ public class LogService {
     @Autowired
     private LogRepository logRepository;
 
-    private String inputText = "";
-    private String outputText = "";
-
     /**
-     * 자막 저장 메서드
-     * @param captionText 저장할 텍스트
+     * 로그 저장 메서드
+     * @param inputText 입력된 텍스트
+     * @param outputText 출력된 텍스트
      * @param isFinalOutput 최종 문장 여부
      */
-    public void saveCaption(String captionText, boolean isFinalOutput) {
+    public void saveLog(String inputText, String outputText, boolean isFinalOutput) {
         Log log = new Log();
         log.setLogDate(Timestamp.valueOf(LocalDateTime.now()));
+        log.setInputText(inputText);
+        log.setOutputText(outputText);
 
-        this.inputText = captionText;
-        log.setInputText(this.inputText);
-
+        // 최종 문장이면 sentence 필드에 최종 문장을 저장
         if (isFinalOutput) {
-            this.outputText = captionText;
-            log.setOutputText(this.outputText);
-            log.setSentence(this.outputText);
+            log.setSentence(outputText);
         } else {
-            log.setSentence(this.inputText); // 중간 문장을 sentence에 저장
+            log.setSentence(inputText);
         }
 
         logRepository.save(log);
 
-        // 로그 정보 출력
+        // 로그 정보 출력 (디버깅 용도)
         System.out.println("RowNum: " + log.getRowNum() +
                 ", Date: " + log.getLogDate() +
                 ", InputText: " + log.getInputText() +
@@ -55,7 +51,7 @@ public class LogService {
      * @return inputText
      */
     public String getInputText() {
-        return inputText;
+        return getInputText();
     }
 
     /**
@@ -63,7 +59,7 @@ public class LogService {
      * @return outputText
      */
     public String getOutputText() {
-        return outputText;
+        return getOutputText();
     }
 
     /**

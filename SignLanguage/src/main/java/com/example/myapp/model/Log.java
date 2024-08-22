@@ -17,15 +17,15 @@ public class Log {
     private Timestamp logDate;
 
     @Lob
-    @Column(name = "INPUT_TEXT")
+    @Column(name = "INPUT_TEXT", columnDefinition = "CLOB")
     private String inputText;
 
     @Lob
-    @Column(name = "OUTPUT_TEXT")
+    @Column(name = "OUTPUT_TEXT", columnDefinition = "CLOB")
     private String outputText;
 
     @Lob
-    @Column(name = "SENTENCE", nullable = false)
+    @Column(name = "SENTENCE", columnDefinition = "CLOB", nullable = false)
     private String sentence;
 
     // Getter and Setter methods
