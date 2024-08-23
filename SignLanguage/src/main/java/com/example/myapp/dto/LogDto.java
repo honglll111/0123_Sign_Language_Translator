@@ -10,7 +10,7 @@ public class LogDto {
     private String outputText; // 최종 문장 (파란색으로 표시)
     private String sentence; // 추가된 sentence 필드
 
-    public LogDto(int rowNum, Timestamp date, String inputText, String outputText, String sentence) { // 수정된 생성자
+    public LogDto(int rowNum, Timestamp date, String inputText, String outputText, String sentence) {
         this.rowNum = rowNum;
         this.date = date;
         this.inputText = inputText;
@@ -51,11 +51,13 @@ public class LogDto {
         this.outputText = outputText;
     }
 
-    public String getSentence() { // 추가된 Getter
+    public String getSentence() {
         return sentence;
     }
 
-    public void setSentence(String sentence) { // 추가된 Setter
+    public void setSentence(String sentence) {
         this.sentence = sentence;
     }
+
+    // 추가적인 자막 데이터를 처리할 수 있는 메서드를 여기에 추가할 수 있습니다.
 }

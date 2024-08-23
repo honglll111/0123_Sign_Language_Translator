@@ -71,7 +71,7 @@
 		    function saveCaptionToDB(captionText) {
 		        $.ajax({
 		            type: "POST",
-		            url: "/api/save-caption",
+		            url: "/logs/save-caption",
 		            data: JSON.stringify({ caption: captionText }),
 		            contentType: "application/json",
 		            success: function (response) {

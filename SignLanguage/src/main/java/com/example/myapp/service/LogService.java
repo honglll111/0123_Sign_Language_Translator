@@ -47,19 +47,11 @@ public class LogService {
     }
 
     /**
-     * 입력된 텍스트 반환
-     * @return inputText
+     * 로그를 내림차순으로 정렬하여 반환하는 메서드
+     * @return 정렬된 로그 리스트
      */
-    public String getInputText() {
-        return getInputText();
-    }
-
-    /**
-     * 최종 출력된 텍스트 반환
-     * @return outputText
-     */
-    public String getOutputText() {
-        return getOutputText();
+    public List<Log> getAllLogsOrderedByDateDesc() {
+        return logRepository.findAllLogsOrderedByDateDesc();
     }
 
     /**
@@ -67,7 +59,7 @@ public class LogService {
      * @return 로그 리스트
      */
     public List<Map<String, Object>> getAllLogsWithRowNum() {
-        List<Log> logs = logRepository.findAllLogsOrderedByDateDesc();
+        List<Log> logs = getAllLogsOrderedByDateDesc(); // 기존 로그 조회 메서드를 활용
         List<Map<String, Object>> result = new ArrayList<>();
 
         for (int i = 0; i < logs.size(); i++) {
