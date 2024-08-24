@@ -29,13 +29,12 @@ public class MyappApplication implements CommandLineRunner {
         List<LogDto> logDtos = new ArrayList<>();
 
         for (Log log : logs) {
-            // LogDto 생성 시 inputText, outputText와 함께 sentence를 전달
+            // LogDto 생성 시 inputText, outputText만 전달
             LogDto logDto = new LogDto(
                     log.getRowNum().intValue(), 
                     log.getLogDate(), 
                     log.getInputText(), // 중간 단어들
-                    log.getOutputText(), // 최종 문장
-                    log.getSentence() // sentence 추가
+                    log.getOutputText() // 최종 문장
             );
             logDtos.add(logDto);
         }
@@ -45,8 +44,7 @@ public class MyappApplication implements CommandLineRunner {
             System.out.println("RowNum: " + logDto.getRowNum() + 
                                ", Date: " + logDto.getDate() + 
                                ", InputText: " + logDto.getInputText() + 
-                               ", OutputText: " + logDto.getOutputText() + 
-                               ", Sentence: " + logDto.getSentence()); // sentence 출력 추가
+                               ", OutputText: " + logDto.getOutputText());
         }
     }
 }

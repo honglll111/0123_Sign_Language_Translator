@@ -29,21 +29,13 @@ public class LogService {
         log.setInputText(inputText);
         log.setOutputText(outputText);
 
-        // 최종 문장이면 sentence 필드에 최종 문장을 저장
-        if (isFinalOutput) {
-            log.setSentence(outputText);
-        } else {
-            log.setSentence(inputText);
-        }
-
         logRepository.save(log);
 
         // 로그 정보 출력 (디버깅 용도)
         System.out.println("RowNum: " + log.getRowNum() +
                 ", Date: " + log.getLogDate() +
                 ", InputText: " + log.getInputText() +
-                ", OutputText: " + log.getOutputText() +
-                ", Sentence: " + log.getSentence());
+                ", OutputText: " + log.getOutputText());
     }
 
     /**
@@ -69,7 +61,6 @@ public class LogService {
             logMap.put("logDate", log.getLogDate());
             logMap.put("inputText", log.getInputText());
             logMap.put("outputText", log.getOutputText());
-            logMap.put("sentence", log.getSentence()); // sentence 값 추가
             result.add(logMap);
         }
 
@@ -96,7 +87,6 @@ public class LogService {
         log.setLogDate(logDetails.getLogDate());
         log.setInputText(logDetails.getInputText());
         log.setOutputText(logDetails.getOutputText());
-        log.setSentence(logDetails.getSentence()); // sentence 값 업데이트
         return logRepository.save(log);
     }
 

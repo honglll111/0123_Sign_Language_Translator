@@ -24,10 +24,6 @@ public class Log {
     @Column(name = "OUTPUT_TEXT", columnDefinition = "CLOB")
     private String outputText;
 
-    @Lob
-    @Column(name = "SENTENCE", columnDefinition = "CLOB", nullable = false)
-    private String sentence;
-
     // Getter and Setter methods
     public Long getRowNum() {
         return rowNum;
@@ -59,14 +55,6 @@ public class Log {
 
     public void setOutputText(String outputText) {
         this.outputText = outputText;
-    }
-
-    public String getSentence() {
-        return sentence;
-    }
-
-    public void setSentence(String sentence) {
-        this.sentence = sentence;
     }
 
     public String getFormattedDate() {
