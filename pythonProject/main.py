@@ -96,10 +96,10 @@ def main():
                 mqtt_publisher.send_base64(image)
 
     send_llama(' '.join(sentence), mqtt_publisher)
-    mqtt_publisher.disconnect()
-
-    video_capture.release()
-    cv2.destroyAllWindows()
+    # mqtt_publisher.disconnect()
+    #
+    # video_capture.release()
+    # cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":

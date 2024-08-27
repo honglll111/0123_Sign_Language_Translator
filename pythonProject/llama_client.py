@@ -1,7 +1,7 @@
 import requests
 
 def send_llama(input_text, mqtt_publisher=None):
-    url = 'https://9010-35-204-34-40.ngrok-free.app/generate'
+    url = 'https://af0a-104-155-232-217.ngrok-free.app/generate'
 
     instruction = "You are a patient, sick person because you were sick. You receive medical treatment at the hospital. Explain where you are sick."
 

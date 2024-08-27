@@ -24,7 +24,15 @@
 		        console.log("MQTT 브로커에 연결됨");
 		        client.subscribe("/#");
 		        checkCameraStatus();
+		        triggerPythonScript();
 		    }
+		    
+		    function triggerPythonScript() {
+                var message = new Paho.MQTT.Message("start");
+                message.destinationName = "/python/start";
+                client.send(message);
+                console.log("Sent start signal to Python script");
+            }
 
 		    function onConnectFailure() {
 		        console.log("MQTT 브로커에 연결할 수 없습니다. 카메라 상태를 확인해 주세요.");
